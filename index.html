@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Madrasa Track</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);--bg:#f2f6f4;--c:#fff;--t:#14221b;--m:#66776e;--p:#0b6b4f;--b:#d8e3dd;--r:#d64545;--ok:#1f9d6b}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1713;--c:#18231d;--t:#e8f1ec;--m:#8fa398;--p:#3fc08f;--b:#2a3a31;--r:#f07070}}
+:root[data-theme="dark"]{--bg:#0f1713;--c:#18231d;--t:#e8f1ec;--m:#8fa398;--p:#3fc08f;--b:#2a3a31;--r:#f07070}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--t);font:15px/1.4 system-ui,sans-serif}
+header{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:linear-gradient(135deg,var(--p),color-mix(in srgb,var(--p) 55%,#000));color:#fff;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+header button{background:#fff3;color:#fff;border:0;border-radius:8px;padding:5px 10px}
+main{padding:12px 12px calc(76px + env(safe-area-inset-bottom,0px));max-width:720px;margin:auto}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--c);border-top:1px solid var(--b);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;border:0;background:none;color:var(--m);padding:13px 2px;font-size:12px}nav .on{color:var(--p);font-weight:700;box-shadow:inset 0 3px var(--p)}
+.card{background:var(--c);border:1px solid var(--b);border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 1px 4px #0000000d}.seg{display:flex;background:var(--bg);border-radius:10px;padding:4px;margin-bottom:10px}.seg button{display:flex;align-items:center;justify-content:center;gap:6px;flex:1;border:0;background:none;color:var(--m);padding:10px;border-radius:8px;font:inherit;font-weight:600}.seg .on{background:var(--p);color:#fff}
+h3{margin:0 0 8px}input,select,button.b{font:inherit;padding:9px;border-radius:8px;border:1px solid var(--b);background:var(--c);color:var(--t);width:100%;margin:3px 0}
+button.b{background:var(--p);color:#fff;border:0;font-weight:600;cursor:pointer}button.b.s{background:none;color:var(--p);border:1px solid var(--p)}button.b.d{background:var(--r)}
+.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.row .f0{flex:0 0 auto;width:auto}
+.g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.k{text-align:center}.k b{display:block;font-size:22px;color:var(--p)}.k span{font-size:12px;color:var(--m)}
+.bar{height:8px;background:var(--b);border-radius:5px;overflow:hidden}.bar i{display:block;height:100%;background:var(--p)}
+.av{width:42px;height:42px;border-radius:50%;object-fit:cover;background:var(--b);display:inline-flex;align-items:center;justify-content:center;flex:0 0 42px}
+.m{color:var(--m);font-size:13px}.chips{display:flex;flex-wrap:wrap;gap:6px}
+.ch,.bb{min-width:36px;height:36px;border-radius:18px;border:1.5px solid var(--b);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0 6px}
+.ch.on,.bb.on{background:var(--p);color:#fff;border-color:var(--p)}
+.abs{background:#d6454522;border-color:var(--r)}.pre{background:#1f9d6b14;border-color:var(--ok)}.ov{position:fixed;inset:0;background:#0008;z-index:9;overflow:auto;padding:16px}.ov .card{max-width:480px;margin:auto}
+svg text{fill:var(--m);font-size:9px}
+</style></head><body>
+<div id="app"></div><div id="mod"></div>
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const IC={home:'<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18m-12 6 2 2 4-4"/>',book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>',omr:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/>',shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',grad:'<path d="M22 10 12 5 2 10l10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>',mosque:'<path d="M3 21h18M5 21v-7M19 21v-7M5 14c0-4 3-6 7-10 4 4 7 6 7 10M12 4V2M10 21v-4a2 2 0 0 1 4 0v4"/>',ok:'<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',xc:'<circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/>',chk:'<path d="M20 6 9 17l-5-5"/>',trash:'<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>'};
+const ic=(n,z=22)=>`<svg width="${z}" height="${z}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${IC[n]}</svg>`;
+let CR=null,dr=null;
+const uid=()=>Math.random().toString(36).slice(2,9),today=()=>new Date().toISOString().slice(0,10);
+const def=()=>({adminPw:'admin123',students:[],att:{},subjects:[{id:uid(),name:'Quran',ch:10},{id:uid(),name:'Fiqh',ch:10},{id:uid(),name:'Aqeedah',ch:10},{id:uid(),name:'Akhlaq',ch:10}],prog:{},exams:[],omr:[]});
+let S;try{S=JSON.parse(localStorage.getItem('mt'))||def()}catch(e){S=def()}
+const save=()=>{try{localStorage.setItem('mt',JSON.stringify(S))}catch(e){}};
+S.methods=S.methods||['Learned','Memorized','Revised'];
+Object.values(S.prog).forEach(p=>Object.keys(p).forEach(k=>{if(Array.isArray(p[k])){const o={};p[k].forEach(n=>o[n]=[1,0,0]);p[k]=o}}));
+let U=null,tab='home',cx={ans:{}};const A=()=>U&&U.role=='a';
+const go=t=>{tab=t;cx.ex=cx.om=null;cx.ans={};render()};
+const stud=id=>S.students.find(s=>s.id==id);
+const stat=(id,m='')=>{const d=Object.keys(S.att).filter(x=>x.startsWith(m));return{t:d.length,p:d.filter(x=>!S.att[x].includes(id)).length}};
+const pc=(a,b)=>b?Math.round(a/b*100):0;
+const bars=(a,mx,u='')=>{if(!a.length)return'<p class="m">No data yet</p>';const w=300/a.length,h=100;return`<svg viewBox="0 0 300 125" width="100%">${a.map(([l,v],i)=>{const bh=mx?v/mx*h:0;return`<rect x="${i*w+w*.15}" y="${h-bh+4}" width="${w*.7}" height="${bh}" rx="3" fill="var(--p)"/><text x="${i*w+w/2}" y="${h-bh+1}" text-anchor="middle">${v}${u}</text><text x="${i*w+w/2}" y="118" text-anchor="middle">${esc(String(l).slice(-5))}</text>`}).join('')}</svg>`};
+const prog=(id,s)=>{const o=S.prog[id]?.[s.id]||{};return pc(Object.keys(o).filter(k=>+k<=s.ch).reduce((a,k)=>a+o[k].reduce((x,y)=>x+y,0),0),s.ch*3)};
+const av=s=>s.photo?`<img class="av" src="${s.photo}">`:`<span class="av">${esc(s.name[0]||'?')}</span>`;
+const months=()=>[...new Set(Object.keys(S.att).map(d=>d.slice(0,7)))].sort();
+
+function render(){
+ if(!U){const r=cx.lr||'a';$('#app').innerHTML=`<main style="padding-top:8vh;max-width:420px"><div style="text-align:center;margin-bottom:18px"><div style="color:var(--p);display:flex;justify-content:center">${ic('mosque',56)}</div><h2 style="margin:4px 0">Madrasa Track</h2><div class="m">Student monitoring system</div></div><div class="card"><div class="seg"><button class="${r=='a'?'on':''}" onclick="cx.lr='a';render()">${ic('shield',16)} Admin</button><button class="${r=='s'?'on':''}" onclick="cx.lr='s';render()">${ic('grad',16)} Student</button></div>${r=='s'?`<input id="lu" placeholder="Your name or contact number" autocomplete="username">`:''}<input id="lp" type="password" placeholder="${r=='a'?'Admin password':'PIN'}" onkeydown="if(event.key=='Enter')login()"><button class="b" onclick="login()" style="margin-top:8px">Login as ${r=='a'?'Admin':'Student'}</button></div></main>`;return}
+ const tabs=A()?[['home','Home','home'],['stu','Students','users'],['att','Ajar','cal'],['study','Study','book'],['exam','Exams','file'],['omr','OMR','omr']]:[['home','Home','home'],['study','Study','book'],['exam','Exams','file'],['omr','OMR','omr']];
+ $('#app').innerHTML=`<header><b style="display:flex;align-items:center;gap:8px">${ic('mosque')} Madrasa Track</b><span class="row" style="flex:0 0 auto"><input type="color" title="Theme colour" value="${S.theme||'#0b6b4f'}" oninput="setTheme(this.value)" style="width:34px;height:30px;padding:0;border:0;background:none;margin:0"><button onclick="U=null;render()">Logout</button></span></header><main>${V[tab]()}</main><nav>${tabs.map(([k,l,i])=>`<button class="${k==tab?'on':''}" onclick="go('${k}')"><span style="display:flex;justify-content:center;margin-bottom:2px">${ic(i)}</span>${l}</button>`).join('')}</nav>`}
+function login(){const r=cx.lr||'a',p=$('#lp').value;
+ if(r=='a'){if(p==S.adminPw)U={role:'a'};else return alert('Wrong password')}
+ else{const q=$('#lu').value.trim().toLowerCase(),m=S.students.filter(x=>x.name.toLowerCase()==q||(x.contact&&x.contact==q));if(!m.length)return alert('Student not found');const st=m.find(x=>p==(x.pin||'1234'));if(!st)return alert('Wrong PIN');U={role:'s',id:st.id}}
+ tab='home';render()}
+const modal=h=>{$('#mod').innerHTML=h?`<div class="ov"><div class="card">${h}</div></div>`:''};
+
+const V={
+home(){
+ if(A()){const n=S.students.length,t=S.att[today()],ab=t?t.filter(stud).length:0;let p=0,tt=0;S.students.forEach(s=>{const r=stat(s.id);p+=r.p;tt+=r.t});
+  const m=cx.m||today().slice(0,7),ds=Object.keys(S.att).filter(d=>d.startsWith(m)).sort();
+  return`<button class="b" onclick="sForm()">+ Add student</button><br><div class="card g"><div class="k"><b>${n}</b><span>Students</span></div><div class="k"><b>${t?n-ab:'–'}</b><span>Present today</span></div><div class="k"><b>${pc(p,tt)}%</b><span>Avg attendance</span></div></div>
+  <div class="card"><h3>Monthly attendance</h3><input type="month" value="${m}" onchange="cx.m=this.value;render()">${bars(ds.map(d=>[d.slice(8),Object.keys(S.att[d]).length?S.students.length-S.att[d].filter(stud).length:0]),n)}<p class="m">Students present per day</p></div>
+  <div class="card"><h3>Subject progress</h3>${S.subjects.map(s=>{const a=n?Math.round(S.students.reduce((x,st)=>x+prog(st.id,s),0)/n):0;return`<div class="row"><span>${esc(s.name)}</span><span class="m f0">${a}%</span></div><div class="bar"><i style="width:${a}%"></i></div>`}).join('<br>')}</div>
+  <div class="card"><h3>Recent exams</h3>${S.exams.slice(-4).reverse().map(e=>{const v=Object.values(e.marks);return`<div class="row"><span>${esc(e.name)}</span><span class="m f0">avg ${v.length?Math.round(v.reduce((a,b)=>a+b,0)/v.length/e.total*100):0}%</span></div>`}).join('')||'<p class="m">No exams</p>'}</div>`}
+ const s=stud(U.id),ms=months(),r=stat(s.id);
+ return`<div class="card row">${av(s)}<div><b>${esc(s.name)}</b><div class="m">Age ${esc(s.age)} · ${esc(s.contact)}</div></div></div>
+ <div class="card g"><div class="k"><b>${r.p}/${r.t}</b><span>Days attended</span></div><div class="k"><b>${pc(r.p,r.t)}%</b><span>Attendance</span></div><div class="k"><b>${S.subjects.length?Math.round(S.subjects.reduce((a,x)=>a+prog(s.id,x),0)/S.subjects.length):0}%</b><span>Syllabus</span></div></div>
+ <div class="card"><h3>Attendance % by month</h3>${bars(ms.map(m=>{const q=stat(s.id,m);return[m.slice(2),pc(q.p,q.t)]}),100,'%')}</div>`},
+stu(){return`<button class="b" onclick="sForm()">+ Add student</button><br>${S.students.map(s=>`<div class="card"><div class="row" onclick="sView('${s.id}')">${av(s)}<div><b>${esc(s.name)}</b><div class="m">Age ${esc(s.age)} · ${esc(s.contact)}</div></div></div></div>`).join('')||'<p class="m">No students yet</p>'}`},
+att(){const d=cx.d||today(),ab=S.att[d]||[],ex=!!S.att[d];
+ return`<div class="card"><input type="date" value="${d}" onchange="cx.d=this.value;render()"><p class="m">${ex?'Saved · edit below':'All present by default. Tap to mark absent.'}</p>
+ ${S.students.map(s=>`<div class="row card ${ab.includes(s.id)?'abs':'pre'}" style="margin:6px 0" onclick="tAb('${s.id}')">${av(s)}<b>${esc(s.name)}</b><span class="f0">${ab.includes(s.id)?`<span style="color:var(--r);display:flex;gap:4px;align-items:center">${ic('xc',18)}Absent</span>`:`<span style="color:var(--ok);display:flex;gap:4px;align-items:center">${ic('ok',18)}Present</span>`}</span></div>`).join('')}
+ <button class="b" onclick="saveAtt()">Save attendance</button></div>`},
+study(){const sid=A()?(cx.sid||S.students[0]?.id):U.id,s=stud(sid);
+ return`${A()?SM():''}${A()?`<select onchange="cx.sid=this.value;render()">${S.students.map(x=>`<option value="${x.id}" ${x.id==sid?'selected':''}>${esc(x.name)}</option>`).join('')}</select>`:''}
+ ${s?S.subjects.map(sub=>{const dn=S.prog[sid]?.[sub.id]||{};return`<div class="card"><div class="row"><b>${esc(sub.name)}</b><span class="m f0">${prog(sid,sub)}%</span></div><div class="bar"><i style="width:${prog(sid,sub)}%"></i></div><div style="margin-top:8px"><div class="row m"><span style="flex:2"></span>${S.methods.map(m=>`<span style="text-align:center;font-size:11px">${esc(m)}</span>`).join('')}</div>${Array.from({length:sub.ch},(_,i)=>{const f=dn[i+1]||[0,0,0];return`<div class="row" style="margin:5px 0"><span style="flex:2;font-size:13px">${i+1}. ${esc(sub.names?.[i+1]||'Chapter '+(i+1))}</span>${[0,1,2].map(m=>`<span class="ch ${f[m]?'on':''}" onclick="tCh('${sid}','${sub.id}',${i+1},${m})">${f[m]?ic('chk',16):''}</span>`).join('')}</div>`}).join('')}</div></div>`}).join(''):'<p class="m">Add students first</p>'}
+ ${false?`<div class="card"><h3>Add subject</h3><div class="row"><input id="sn" placeholder="Subject name"><input id="sc" type="number" placeholder="Chapters"></div><button class="b" onclick="addSub()">Add</button>${S.subjects.map(x=>`<div class="row m"><span>${esc(x.name)} (${x.ch})</span><button class="b d f0" onclick="delSub('${x.id}')">${ic('trash',16)}</button></div>`).join('')}</div>`:''}`},
+exam(){
+ if(A()&&cx.ex){const e=S.exams.find(x=>x.id==cx.ex);return`<button class="b s" onclick="cx.ex=null;render()">← Back</button><div class="card"><h3>${esc(e.name)}</h3><p class="m">${esc(e.sub)} · ${e.date} · out of ${e.total}</p>${S.students.map(s=>`<div class="row"><span>${esc(s.name)}</span><input type="number" max="${e.total}" value="${e.marks[s.id]??''}" onchange="setMark('${e.id}','${s.id}',this.value)"></div>`).join('')}</div>`}
+ if(A())return`<div class="card"><h3>New exam</h3><input id="en" placeholder="Exam name"><select id="es">${S.subjects.map(s=>`<option>${esc(s.name)}</option>`).join('')}</select><div class="row"><input id="ed" type="date" value="${today()}"><input id="et" type="number" placeholder="Total marks"></div><button class="b" onclick="addExam()">Create</button></div>
+ ${S.exams.slice().reverse().map(e=>{const v=Object.values(e.marks);return`<div class="card row" onclick="cx.ex='${e.id}';render()"><div><b>${esc(e.name)}</b><div class="m">${esc(e.sub)} · ${e.date}</div></div><span class="f0 m">avg ${v.length?Math.round(v.reduce((a,b)=>a+b,0)/v.length/e.total*100):0}%</span></div>`}).join('')}`;
+ const mine=S.exams.filter(e=>e.marks[U.id]!=null).sort((a,b)=>a.date>b.date?1:-1);
+ return`<div class="card"><h3>My performance %</h3>${bars(mine.map(e=>[e.date.slice(5),pc(e.marks[U.id],e.total)]),100,'%')}</div>${mine.map(e=>`<div class="card row"><div><b>${esc(e.name)}</b><div class="m">${esc(e.sub)} · ${e.date}</div></div><b class="f0">${e.marks[U.id]}/${e.total}</b></div>`).join('')}`},
+omr(){
+ if(cx.om){const o=S.omr.find(x=>x.id==cx.om),key=A(),sel=key?o.key:cx.ans,r=o.res[U.id];
+  return`<button class="b s" onclick="cx.om=null;render()">← Back</button><div class="card"><h3>${esc(o.title)}</h3><p class="m">${key?'Tap the correct answer for each question (answer key)':r!=null?`Your score: ${r}/${o.n}`:'Select your answers'}</p>
+  ${Array.from({length:o.n},(_,i)=>`<div class="row" style="margin:6px 0"><b class="f0" style="width:30px">${i+1}</b><div class="chips">${'ABCD'.split('').map(c=>`<span class="bb ${sel[i]==c?'on':''}" onclick="${key||r==null?`pick(${i},'${c}')`:''}">${c}</span>`).join('')}</div></div>`).join('')}
+  ${key?`<button class="b" onclick="save();alert('Key saved')">Save key</button><h3 style="margin-top:14px">Results</h3>${S.students.map(s=>`<div class="row"><span>${esc(s.name)}</span><b class="f0">${o.res[s.id]!=null?o.res[s.id]+'/'+o.n:'–'}</b></div>`).join('')}`:r==null?`<button class="b" onclick="submitOmr()">Submit</button>`:''}</div>`}
+ return`${A()?`<div class="card"><h3>New OMR paper</h3><div class="row"><input id="ot" placeholder="Title"><input id="on" type="number" placeholder="Questions"></div><button class="b" onclick="addOmr()">Create</button></div>`:''}${S.omr.map(o=>`<div class="card row" onclick="cx.om='${o.id}';cx.ans={};render()"><b>${esc(o.title)}</b><span class="m f0">${o.n} Qs${!A()&&o.res[U.id]!=null?''+o.res[U.id]+'/'+o.n:''}</span></div>`).join('')||'<p class="m">No papers yet</p>'}`}
+};
+
+function SM(){return`<div class="card"><h3>Subjects & chapters</h3><div class="row"><input id="sn" placeholder="New subject name"><button class="b f0" onclick="addSub()">+ Subject</button></div><p class="m" style="margin:10px 0 2px">Chapter tracking methods (3)</p><div class="row">${S.methods.map((m,i)=>`<input value="${esc(m)}" onchange="S.methods[${i}]=this.value.trim()||S.methods[${i}];save();render()">`).join('')}</div>${S.subjects.map(x=>`<div style="margin-top:10px"><div class="row"><b>${esc(x.name)} <span class="m">(${x.ch} ch)</span></b><button class="b s f0" onclick="addCh('${x.id}')">+ Chapter</button><button class="b s f0" onclick="rmCh('${x.id}')">-</button><button class="b d f0" onclick="delSub('${x.id}')">${ic('trash',16)}</button></div>${x.names?`<div class="m">${Object.keys(x.names).sort((a,b)=>a-b).map(k=>k+'. '+esc(x.names[k])).join('')}</div>`:''}</div>`).join('')}</div>`}
+function addCh(id){const x=S.subjects.find(s=>s.id==id),n=prompt('Chapter name (optional)');if(n===null)return;x.ch++;if(n.trim()){x.names=x.names||{};x.names[x.ch]=n.trim()}save();render()}
+function rmCh(id){const x=S.subjects.find(s=>s.id==id);if(x.ch<1||!confirm('Remove last chapter?'))return;if(x.names)delete x.names[x.ch];x.ch--;Object.values(S.prog).forEach(p=>{if(p[id])delete p[id][x.ch+1]});save();render()}
+function sForm(id){const s=stud(id)||{};cx.photo=s.photo||'';const f=(k,l,t='text')=>`<label class="m">${l}</label><input id="f_${k}" type="${t}" value="${esc(s[k]||'')}">`;
+ modal(`<h3>${id?'Edit':'Add'} student</h3>${f('name','Name')}${f('address','Address')}${f('guardian','Mappan / Guardian')}<div class="row"><div>${f('age','Age','number')}</div><div>${f('dob','Date of birth','date')}</div></div>${f('contact','Contact number','tel')}${f('emergency','Emergency contact','tel')}${f('pin','Login PIN (default 1234)')}<label class="m">Profile photo</label><div class="row"><img id="pv" class="av" src="${cx.photo||''}" style="width:64px;height:64px;flex:0 0 64px;${cx.photo?'':'display:none'}"><input type="file" accept="image/*" onchange="photo(this)"></div><div id="crop" style="display:none;text-align:center"><p class="m">Drag to move · slider to zoom</p><canvas id="cv" width="240" height="240" style="width:240px;height:240px;border-radius:12px;touch-action:none;background:var(--b)" onpointerdown="dr={x:event.clientX,y:event.clientY};this.setPointerCapture(event.pointerId)" onpointermove="dragCrop(event)" onpointerup="dr=null"></canvas><input type="range" min="1" max="3" step="0.05" value="1" oninput="zoom(this.value)"><button class="b s" onclick="useCrop()">Use this crop</button></div><br><div class="row"><button class="b s" onclick="modal('')">Cancel</button><button class="b" onclick="saveStu('${id||''}')">Save</button></div>`)}
+function photo(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const m=Math.min(im.width,im.height);CR={im,z:1,sx:(im.width-m)/2,sy:(im.height-m)/2};$('#crop').style.display='block';drawCrop()};im.src=r.result};r.readAsDataURL(f)}
+function drawCrop(){const m=CR,g=$('#cv').getContext('2d');m.sz=Math.min(m.im.width,m.im.height)/m.z;m.sx=Math.max(0,Math.min(m.im.width-m.sz,m.sx));m.sy=Math.max(0,Math.min(m.im.height-m.sz,m.sy));g.clearRect(0,0,240,240);g.drawImage(m.im,m.sx,m.sy,m.sz,m.sz,0,0,240,240)}
+function zoom(v){const m=CR,x=m.sx+m.sz/2,y=m.sy+m.sz/2;m.z=+v;const n=Math.min(m.im.width,m.im.height)/m.z;m.sx=x-n/2;m.sy=y-n/2;drawCrop()}
+function dragCrop(e){if(!dr||!CR)return;const k=CR.sz/240;CR.sx-=(e.clientX-dr.x)*k;CR.sy-=(e.clientY-dr.y)*k;dr={x:e.clientX,y:e.clientY};drawCrop()}
+function useCrop(){const c=document.createElement('canvas');c.width=c.height=200;c.getContext('2d').drawImage(CR.im,CR.sx,CR.sy,CR.sz,CR.sz,0,0,200,200);cx.photo=c.toDataURL('image/jpeg',.8);$('#crop').style.display='none';$('#pv').src=cx.photo;$('#pv').style.display='inline-flex';CR=null}
+function saveStu(id){if(CR)useCrop();const g=k=>$('#f_'+k).value.trim(),o={};['name','address','guardian','age','dob','contact','emergency','pin'].forEach(k=>o[k]=g(k));if(!o.name)return alert('Name required');o.photo=cx.photo;
+ if(id)Object.assign(stud(id),o);else S.students.push({id:uid(),...o});save();modal('');render()}
+function sView(id){const s=stud(id),r=stat(id),ms=months();modal(`<div class="row">${av(s)}<div><b>${esc(s.name)}</b><div class="m">Age ${esc(s.age)} · DOB ${esc(s.dob)}</div></div></div><p class="m">Address: ${esc(s.address)}<br>Mappan: ${esc(s.guardian)}<br>Phone: ${esc(s.contact)} · Emergency: ${esc(s.emergency)}</p><b>Attendance ${pc(r.p,r.t)}% (${r.p}/${r.t})</b>${bars(ms.map(m=>{const q=stat(id,m);return[m.slice(2),pc(q.p,q.t)]}),100,'%')}<div class="row"><button class="b s" onclick="modal('')">Close</button><button class="b" onclick="sForm('${id}')">Edit</button><button class="b d" onclick="delStu('${id}')">Delete</button></div>`)}
+function delStu(id){if(!confirm('Delete this student?'))return;S.students=S.students.filter(s=>s.id!=id);save();modal('');render()}
+function tAb(id){const d=cx.d||today(),a=S.att[d]||[];cx.tmp=cx.tmp&&cx.tmpd==d?cx.tmp:[...a];cx.tmpd=d;cx.tmp=cx.tmp.includes(id)?cx.tmp.filter(x=>x!=id):[...cx.tmp,id];S.att[d]=cx.tmp;render()}
+function saveAtt(){const d=cx.d||today();S.att[d]=S.att[d]||[];save();cx.tmp=null;alert('Saved '+d);render()}
+function tCh(sid,sub,n,m){S.prog[sid]=S.prog[sid]||{};const o=S.prog[sid][sub]=S.prog[sid][sub]||{};const f=o[n]=o[n]||[0,0,0];f[m]=f[m]?0:1;save();render()}
+function addSub(){const n=$('#sn').value.trim(),c=+($('#sc')?.value)||1;if(!n)return;S.subjects.push({id:uid(),name:n,ch:c});save();render()}
+function delSub(id){if(confirm('Delete subject?')){S.subjects=S.subjects.filter(s=>s.id!=id);save();render()}}
+function addExam(){const n=$('#en').value.trim(),t=+$('#et').value;if(!n||!t)return;S.exams.push({id:uid(),name:n,sub:$('#es').value,date:$('#ed').value,total:t,marks:{}});save();render()}
+function setMark(e,s,v){const x=S.exams.find(q=>q.id==e);if(v==='')delete x.marks[s];else x.marks[s]=+v;save()}
+function addOmr(){const t=$('#ot').value.trim(),n=+$('#on').value;if(!t||!n)return;S.omr.push({id:uid(),title:t,n,key:{},res:{}});save();render()}
+function pick(i,c){const o=S.omr.find(x=>x.id==cx.om);(A()?o.key:cx.ans)[i]=c;if(A())save();render()}
+function submitOmr(){const o=S.omr.find(x=>x.id==cx.om);let sc=0;for(let i=0;i<o.n;i++)if(o.key[i]&&o.key[i]==cx.ans[i])sc++;o.res[U.id]=sc;save();render()}
+if(S.theme)document.documentElement.style.setProperty('--p',S.theme);
+function setTheme(v){S.theme=v;document.documentElement.style.setProperty('--p',v);save()}
+render();
+</script></body></html>
